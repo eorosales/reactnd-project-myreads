@@ -8,10 +8,7 @@ class BooksApp extends React.Component {
     super(props);
     this.handleUpdate = this.handleUpdate.bind(this);
     this.state = {
-      myBooks: [],
-      currentlyReading: [],
-      wantToRead: [],
-      read: []
+      myBooks: []
     }
   }
 
@@ -26,14 +23,10 @@ class BooksApp extends React.Component {
 
   handleUpdate(book, shelf) {
       BooksAPI.update(book, shelf)
-      .then(data => {
-        this.setState((prevState) => ({
-          currentlyReading: data.currentlyReading,
-          wantToRead: data.wantToRead,
-          read: data.read
-        }))
-            console.log(this.state);
-      })
+      book.shelf = shelf;
+      this.setState(prevState => ({
+        myBooks: prevState.myBooks.filter(b => b.id !== book.id.concat([book]))
+      }))
   }
 
   render() {
