@@ -8,26 +8,32 @@ class BooksApp extends React.Component {
     super(props);
     this.handleUpdate = this.handleUpdate.bind(this);
     this.state = {
-      allBooks: [],
+      myBooks: [],
       currentlyReading: [],
       wantToRead: [],
       read: []
     }
   }
 
+  // Initialize bookshelves with their current shelf when component renders
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
       this.setState(() => ({
-        allBooks: books,
-        currentlyReading: books.filter(b => b.shelf === 'currentlyReading'),
-        wantToRead: books.filter(b => b.shelf === 'wantToRead'),
-        read: books.filter(b => b.shelf === 'read')
+        myBooks: books
       }))
     })
   }
 
   handleUpdate(book, shelf) {
-    BooksAPI.update(book, shelf)
+      BooksAPI.update(book, shelf)
+      .then(data => {
+        this.setState((prevState) => ({
+          currentlyReading: data.currentlyReading,
+          wantToRead: data.wantToRead,
+          read: data.read
+        }))
+            console.log(this.state);
+      })
   }
 
   render() {
@@ -38,9 +44,21 @@ class BooksApp extends React.Component {
         </div>
         <div className="list-books-content">
           <div>
-            <Bookshelf bookshelfTitle='Currently Reading' currentBooks={this.state.currentlyReading} handleUpdate={this.handleUpdate}/>
-            <Bookshelf bookshelfTitle='Want to Read' currentBooks={this.state.wantToRead} handleUpdate={this.handleUpdate}/>
-            <Bookshelf bookshelfTitle='Read' currentBooks={this.state.read} handleUpdate={this.handleUpdate}/>
+            <Bookshelf
+              bookshelfTitle='Currently Reading'
+              currentBooks={this.state.myBooks.filter(b => b.shelf === 'currentlyReading')}
+              handleUpdate={this.handleUpdate}
+              />
+            <Bookshelf
+              bookshelfTitle='Want to Read'
+              currentBooks={this.state.myBooks.filter(b => b.shelf === 'wantToRead')}
+              handleUpdate={this.handleUpdate}
+              />
+            <Bookshelf
+              bookshelfTitle='Read'
+              currentBooks={this.state.myBooks.filter(b => b.shelf === 'read')}
+              handleUpdate={this.handleUpdate}
+              />
           </div>
         </div>
         <div className="open-search">

@@ -3,21 +3,24 @@ import React, { Component } from 'react';
 class Book extends Component {
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
     this.state = {
-      currentShelf: this.props.shelf
+      shelf: this.props.shelf
     }
   }
 
-  handleChange(event) {
+  componentDidMount() {
+    this.setState({ shelf: this.props.shelf })
+  }
+
+  handleChange(value) {
     this.setState({
-      currentShelf: event.target.value
+      shelf: value
     })
   }
 
   render() {
 
-    const { title, authors, cover, handleUpdate } = this.props;
+    const { book, title, authors, cover, handleUpdate } = this.props;
 
     return (
       <li>
@@ -30,10 +33,9 @@ class Book extends Component {
                   backgroundImage: `url(${ cover })` }}></div>
             <div className="book-shelf-changer">
               <select
-                value={this.state.currentShelf}
+                value={this.state.shelf}
                 onChange={
-                  (event) => this.handleChange(event,
-                  handleUpdate(this.props, event.target.value))
+                  (event) => this.handleChange(event.target.value, handleUpdate(book, event.target.value))
                 }>
                 <option value="move" disabled>Move to...</option>
                 <option value="currentlyReading">Currently Reading</option>
