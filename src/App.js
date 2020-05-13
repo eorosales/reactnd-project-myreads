@@ -1,7 +1,7 @@
 import React from 'react';
 import * as BooksAPI from './BooksAPI';
 import './App.css';
-import Bookshelf from './Bookshelf';
+import ListBooks from './ListBooks';
 import Search from './Search';
 import { Link } from 'react-router-dom'
 import { Route } from 'react-router-dom'
@@ -33,44 +33,21 @@ class BooksApp extends React.Component {
   }
 
   render() {
-    return (<div className="app">
-      <div className="list-books">
-        <div className="list-books-title">
-          <h1>MyReads</h1>
-        </div>
-
-        <Route exact path='/' render = {() => (
-          <div>
-            <div className="list-books-content">
-              <div>
-                <Bookshelf
-                  bookshelfTitle='Currently Reading'
-                  currentBooks={this.state.myBooks.filter(b => b.shelf === 'currentlyReading')}
-                  handleUpdate={this.handleUpdate}
-                  />
-                <Bookshelf
-                  bookshelfTitle='Want to Read'
-                  currentBooks={this.state.myBooks.filter(b => b.shelf === 'wantToRead')}
-                  handleUpdate={this.handleUpdate}
-                  />
-                <Bookshelf
-                  bookshelfTitle='Read'
-                  currentBooks={this.state.myBooks.filter(b => b.shelf === 'read')}
-                  handleUpdate={this.handleUpdate}
-                  />
-              </div>
-            </div>
-            <Link
-              to='/search'
-              className="open-search">
-              <button>Add a book</button>
-            </Link>
-          </div>
+    return (
+      <div className="app">
+        <Route exact path='/'
+          render = {() => (
+            <ListBooks
+              myBooks={this.state.myBooks}
+              handleUpdate={this.handleUpdate}
+            />
         )}/>
-
-      <Route path='/search' component = {Search}  />
-      </div>
-    </div>)
+        <Link to='/search' className="open-search">
+          <button>Add a book</button>
+        </Link>
+        <Route path='/search' component = {Search}  />
+    </div>
+    )
   }
 }
 
