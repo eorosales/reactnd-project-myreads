@@ -26,6 +26,11 @@ class BooksApp extends React.Component {
 
   handleUpdate(book, shelf) {
     BooksAPI.update(book, shelf)
+
+    .then(resp => {
+      console.log(resp);
+    });
+
     book.shelf = shelf;
     this.setState(prevState => ({
       myBooks: prevState.myBooks.filter(b => b.id !== book.id.concat([book]))
@@ -45,8 +50,13 @@ class BooksApp extends React.Component {
         <Link to='/search' className="open-search">
           <button>Add a book</button>
         </Link>
-        <Route path='/search' component = {Search}  />
-    </div>
+        <Route path='/search' component = {() => (
+          <Search
+            myBooks={this.state.myBooks}
+            handleUpdate={this.handleUpdate}
+          />
+        )}/>
+      </div>
     )
   }
 }
