@@ -22,8 +22,8 @@ class Search extends Component {
     if(query !== '') {
       BooksAPI.search(query)
       .then(results => {
-        // if results return an error when a query is entered, empty array f
-        // for searchResults
+        // if results return an error when a query is entered
+        // empty array for searchResults
         if(query === '' || results.error) {
           this.setState(prevState => ({
             ...prevState,
@@ -43,6 +43,10 @@ class Search extends Component {
         searchResults: []
       }))
     }
+  }
+
+  handleUpdate = () => {
+    console.log('test');
   }
 
 
@@ -73,7 +77,7 @@ class Search extends Component {
                 key={book.id}
                 title={book.title}
                 authors={book.authors}
-                cover={book.imageLinks.smallThumbnail}
+                cover={book.imageLinks && book.imageLinks.smallThumbnail}
                 shelf={book.shelf}
                 handleUpdate={this.props.handleUpdate}
               />
